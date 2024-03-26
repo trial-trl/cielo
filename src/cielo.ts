@@ -24,21 +24,11 @@ export class Cielo {
 
   public creditCard: CreditCard;
   public debitCard: DebitCard;
-
   public card: Card;
-  public cartao: Card = this.card;
-
   public consult: Consult;
-  public consulta: Consult;
-
   public recurrent: Recurrent;
-  public recorrencia: Recurrent;
-
   public bankSlip: BankSlip;
-  public boleto: BankSlip;
-
   public eletronicTransfer: EletronicTransfer;
-  public transferenciaEletronica: EletronicTransfer;
   
   constructor(constructor: CieloConstructor) {
     this.merchantId = constructor.merchantId;
@@ -47,9 +37,9 @@ export class Cielo {
     this.sandbox = constructor.sandbox || false;
     this.requestId = constructor.requestId || undefined;
 
-    const [hostnameTransacao, hostnameQuery] = this.getHostnames(this.sandbox);
+    const [hostnameTransaction, hostnameQuery] = this.getHostnames(this.sandbox);
     const cieloTransactionInterface: CieloTransactionInterface = {
-      hostnameTransacao,
+      hostnameTransaction,
       hostnameQuery,
       merchantId: this.merchantId,
       merchantKey: this.merchantKey,
@@ -63,11 +53,6 @@ export class Cielo {
     this.recurrent = new Recurrent(cieloTransactionInterface);
     this.bankSlip = new BankSlip(cieloTransactionInterface);
     this.eletronicTransfer = new EletronicTransfer(cieloTransactionInterface);
-
-    this.consulta = this.consult;
-    this.recorrencia = this.recurrent;
-    this.boleto = this.bankSlip;
-    this.transferenciaEletronica = this.eletronicTransfer;
   }
 
   private getHostnames(sandbox: boolean): Array<string> {

@@ -103,7 +103,7 @@ export class Recurrent {
       const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
         method: HttpRequestMethodEnum.PUT,
         path: params.path,
-        hostname: this.cieloTransactionParams.hostnameTransacao,
+        hostname: this.cieloTransactionParams.hostnameTransaction,
       });
 
       return this.util.httpRequest(options, params.data);

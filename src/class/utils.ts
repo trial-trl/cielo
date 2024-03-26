@@ -37,7 +37,7 @@ export class Utils {
     const options: IHttpRequestOptions = this.getHttpRequestOptions({
       method: HttpRequestMethodEnum.POST,
       path,
-      hostname: this.cieloConstructor.hostnameTransacao,
+      hostname: this.cieloConstructor.hostnameTransaction,
     });
     return this.request<T>(options, data);
   }

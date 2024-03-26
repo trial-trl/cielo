@@ -1,5 +1,5 @@
 export interface CieloTransactionInterface {
-  hostnameTransacao: string;
+  hostnameTransaction: string;
   hostnameQuery: string;
   merchantId: string;
   merchantKey: string;

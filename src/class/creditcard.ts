@@ -26,7 +26,7 @@ export class CreditCard {
       const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
         method: HttpRequestMethodEnum.PUT,
         path: `/1/sales/${transaction.paymentId}/capture`,
-        hostname: this.cieloTransactionParams.hostnameTransacao,
+        hostname: this.cieloTransactionParams.hostnameTransaction,
       });
 
       if (transaction.amount && transaction.amount > 0) {
@@ -43,7 +43,7 @@ export class CreditCard {
       const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
         method: HttpRequestMethodEnum.PUT,
         path: path,
-        hostname: this.cieloTransactionParams.hostnameTransacao,
+        hostname: this.cieloTransactionParams.hostnameTransaction,
       });
       return this.util.request<CancelTransactionResponseModel>(options, {})
   }
