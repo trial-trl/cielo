@@ -1,5 +1,5 @@
 import { CieloTransactionInterface } from "../interface/cielo-transaction.interface";
-import { DebitCardSimpleTransactionResponseModel, DebitCardSimpleTransactionRequestModel } from "../models/debit-card";
+import { DebitCardSimpleTransactionResponseModel, DebitCardSimpleTransactionRequestModel } from "../../models/debit-card";
 import { Utils, IHttpRequestOptions, HttpRequestMethodEnum } from "./utils";
 
 export class DebitCard {

@@ -1,4 +1,4 @@
-import { AddressModel } from './../address.model';
+import { AddressModel } from '../../cielo/models/address.model';
 
 export interface CustomerEletronicTransferRequest {
     name: string;

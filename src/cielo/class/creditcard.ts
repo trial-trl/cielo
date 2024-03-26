@@ -1,4 +1,4 @@
-import { CancelTransactionResponseModel } from './../models/credit-card/cancel-transaction.response.model';
+import { CancelTransactionResponseModel } from '../models/credit-card/cancel-transaction.response.model';
 import { Utils, IHttpRequestOptions, HttpRequestMethodEnum } from './utils';
 import { CieloTransactionInterface } from "../interface/cielo-transaction.interface";
 import {

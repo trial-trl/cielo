@@ -1,4 +1,4 @@
-import { AddressModel } from './../address.model';
+import { AddressModel } from '../address.model';
 import { Link } from './../link-model';
 
   export interface CustomerBankSlipResponse {

@@ -10,9 +10,9 @@ import {
   RecurrentModifyNextPaymentDateModel,
   RecurrentModifyModel,
   RecurrentCreateResponse
-} from "../models/recurrent-payment";
-import { CustomerModel, PaymentRequestModel, PaymentRecurrentModifyModel } from "../models";
-import { RecurrentModifyPaymentModel } from "../models/recurrent-payment/recurrent-modify-payment.model";
+} from "../../models/recurrent-payment";
+import { CustomerModel, PaymentRequestModel, PaymentRecurrentModifyModel } from "../../models";
+import { RecurrentModifyPaymentModel } from "../../models/recurrent-payment/recurrent-modify-payment.model";
 
 export class Recurrent {
   private cieloTransactionParams: CieloTransactionInterface;

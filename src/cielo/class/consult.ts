@@ -9,9 +9,9 @@ import {
   ConsultTokenRequestModel,
   ConsultTokenResponseModel
 } from '../models/consults';
-import { TransactionCreditCardResponseModel } from './../models/credit-card/transaction-credit-card.response.model';
+import { TransactionCreditCardResponseModel } from '../models/credit-card/transaction-credit-card.response.model';
 import { HttpRequestMethodEnum, IHttpRequestOptions, Utils } from './utils';
-import { RecurrentPaymentConsultResponseModel } from '../models/recurrent-payment';
+import { RecurrentPaymentConsultResponseModel } from '../../models/recurrent-payment';
 
 export class Consult {
   private cieloTransactionParams: CieloTransactionInterface;

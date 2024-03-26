@@ -1,6 +1,6 @@
 import { Utils, IHttpRequestOptions, HttpRequestMethodEnum } from './utils';
 import { CieloTransactionInterface } from '../interface/cielo-transaction.interface';
-import { EletronicTransferCreateResponseModel, EletronicTransferCreateRequestModel } from '../models/eletronic-transfer';
+import { EletronicTransferCreateResponseModel, EletronicTransferCreateRequestModel } from '../../models/eletronic-transfer';
 
 export class EletronicTransfer {
   private cieloTransactionParams: CieloTransactionInterface;
