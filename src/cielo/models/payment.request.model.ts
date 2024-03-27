@@ -1,5 +1,5 @@
 import { AirlineDataModel } from './airline-data.model';
-import { CreditCardModel } from './credit-card.model';
+import { CreditCardModel, TokenizedCreditCardModel } from './credit-card.model';
 import { EnumPaymentInterest, EnumCardType } from "../enums";
 import { RecurrentPaymentModel } from './recurrent-payment';
 import { FraudAnalysisModel } from './fraud-analysis/fraud-analysis.model';
@@ -40,7 +40,7 @@ export interface PaymentRequestModel {
   /**
    * Dados do cartão
    */
-  creditCard: CreditCardModel;
+  creditCard: CreditCardModel | TokenizedCreditCardModel;
   /**
    * Deve ser enviado com valor “true” caso se trate de uma transação de compra ou venda de Criptomoeda
    */

@@ -6,6 +6,7 @@ import { Card } from './class/cards';
 import { TransactionInterface } from './interface/transaction.interface';
 import { CreditCard } from './class/creditcard';
 import { DebitCard } from './class/debit-card';
+import { ZeroAuth } from './class/zero-auth';
 
 export interface CieloConstructor {
   merchantId: string;
@@ -29,6 +30,7 @@ export class Cielo {
   public recurrent: Recurrent;
   public bankSlip: BankSlip;
   public eletronicTransfer: EletronicTransfer;
+  public zeroAuth: ZeroAuth;
   
   constructor(constructor: CieloConstructor) {
     this.merchantId = constructor.merchantId;
@@ -53,6 +55,7 @@ export class Cielo {
     this.recurrent = new Recurrent(cieloTransactionInterface);
     this.bankSlip = new BankSlip(cieloTransactionInterface);
     this.eletronicTransfer = new EletronicTransfer(cieloTransactionInterface);
+    this.zeroAuth = new ZeroAuth(cieloTransactionInterface);
   }
 
   private getHostnames(sandbox: boolean): Array<string> {

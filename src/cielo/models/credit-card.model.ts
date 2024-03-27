@@ -37,3 +37,18 @@ export interface CreditCardModel {
    */
   PaymentAccountReference?: string;
 }
+
+export interface TokenizedCreditCardModel {
+  /**
+   * Token de identificação do Cartão.  
+   */
+  cardToken?: string;
+  /**
+   * Código de segurança impresso no verso do cartão - Ver Anexo.
+   */
+  securityCode?: string;
+  /**
+   * Bandeira do cartão (Visa / Master / Amex / Elo / Aura / JCB / Diners / Discover / Hipercard / Hiper).
+   */
+  brand: EnumBrands;
+}

@@ -149,3 +149,19 @@ export enum EnumFraudAnalysisStatus {
   Aborted = 4,
   Unfinished = 5
 }
+
+export enum EWalletType {
+  ApplePay = 'ApplePay',
+  SamsungPay = 'SamsungPay', 
+  GooglePay = 'GooglePay'
+}
+
+export enum WebhookChangeType {
+  PAYMENT_STATUS = 1,
+  RECURRENCY_CREATED = 2,
+  FRAUD_STATUS = 3,
+  RECURRENCY_STATUS = 4,
+  CANCEL_DENIED = 5,
+  CHARGEBACK_NOTIFICATION = 7,
+  FRAUD_ALERT = 8,
+}
