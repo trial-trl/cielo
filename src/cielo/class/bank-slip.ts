@@ -1,20 +1,23 @@
-import { CieloTransactionInterface } from "../interface/cielo-transaction.interface";
+import { TransactionInterface } from '../interface/transaction.interface';
 import {
-  BankSlipCreateRequestModel,
-  BankSlipCreateResponseModel
-} from "../models/bank-slip";
-import { Utils, IHttpRequestOptions, HttpRequestMethodEnum } from "./utils";
+    BankSlipCreateRequestModel,
+    BankSlipCreateResponseModel,
+} from '../models/bank-slip';
+import { Utils } from './utils';
 
 export class BankSlip {
-  private cieloTransactionParams: CieloTransactionInterface;
-  private util: Utils;
+    private util: Utils;
 
-  constructor(transaction: CieloTransactionInterface) {
-    this.cieloTransactionParams = transaction;
-    this.util = new Utils(this.cieloTransactionParams)
-  }
+    constructor(transactionParams: TransactionInterface) {
+        this.util = new Utils(transactionParams);
+    }
 
-  public create(request: BankSlipCreateRequestModel): Promise<BankSlipCreateResponseModel> {
-      return this.util.postToSales<BankSlipCreateResponseModel, BankSlipCreateRequestModel>(request);
-  }
+    public create(
+        request: BankSlipCreateRequestModel
+    ): Promise<BankSlipCreateResponseModel> {
+        return this.util.postToSales<
+            BankSlipCreateResponseModel,
+            BankSlipCreateRequestModel
+        >(request);
+    }
 }

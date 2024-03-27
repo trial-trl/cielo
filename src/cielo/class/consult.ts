@@ -1,66 +1,72 @@
-import { CieloTransactionInterface } from "../interface/cielo-transaction.interface";
+import { TransactionInterface } from '../interface/transaction.interface';
 import {
-  ConsultMerchantOrderIdResponseModel,
-  ConsultBinResponseModel,
-  ConsultBinRequestModel,
-  ConsultTransactionMerchantOrderIdRequestModel,
-  ConsultTransactionPaymentIdRequestModel,
-  ConsultTransactionRecurrentPaymentIdRequestModel,
-  ConsultTokenRequestModel,
-  ConsultTokenResponseModel
+    ConsultMerchantOrderIdResponseModel,
+    ConsultBinResponseModel,
+    ConsultBinRequestModel,
+    ConsultTransactionMerchantOrderIdRequestModel,
+    ConsultTransactionPaymentIdRequestModel,
+    ConsultTransactionRecurrentPaymentIdRequestModel,
+    ConsultTokenRequestModel,
+    ConsultTokenResponseModel,
 } from '../models/consults';
 import { TransactionCreditCardResponseModel } from '../models/credit-card/transaction-credit-card.response.model';
-import { HttpRequestMethodEnum, IHttpRequestOptions, Utils } from './utils';
-import { RecurrentPaymentConsultResponseModel } from '../../models/recurrent-payment';
+import { RecurrentPaymentConsultResponseModel } from '../models/recurrent-payment';
+import { Utils } from './utils';
 
 export class Consult {
-  private cieloTransactionParams: CieloTransactionInterface;
-  private util: Utils;
+    private util: Utils;
 
+    constructor(transactionParams: TransactionInterface) {
+        this.util = new Utils(transactionParams);
+    }
 
-  constructor(transaction: CieloTransactionInterface) {
-    this.cieloTransactionParams = transaction;
-    this.util = new Utils(transaction);
-  }
+    public paymentId(
+        params: ConsultTransactionPaymentIdRequestModel
+    ): Promise<TransactionCreditCardResponseModel> {
+        const options = {
+            path: `/1/sales/${params.paymentId}`,
+        };
 
-  public paymentId(params: ConsultTransactionPaymentIdRequestModel): Promise<TransactionCreditCardResponseModel> {
-      const options = {
-        path: `/1/sales/${params.paymentId}`,
-      };
+        return this.util.get<TransactionCreditCardResponseModel>(options);
+    }
 
-      return this.util.get<TransactionCreditCardResponseModel>(options);
-  }
+    public merchantOrderId(
+        params: ConsultTransactionMerchantOrderIdRequestModel
+    ): Promise<ConsultMerchantOrderIdResponseModel> {
+        const options = {
+            path: `/1/sales?merchantOrderId=${params.merchantOrderId}`,
+        };
 
-  public merchantOrderId(params: ConsultTransactionMerchantOrderIdRequestModel): Promise<ConsultMerchantOrderIdResponseModel> {
-      const options = {
-        path: `/1/sales?merchantOrderId=${params.merchantOrderId}`,
-      };
+        return this.util.get<ConsultMerchantOrderIdResponseModel>(options);
+    }
 
-      return this.util.get<ConsultMerchantOrderIdResponseModel>(options);
-  }
+    public recurrent(
+        params: ConsultTransactionRecurrentPaymentIdRequestModel
+    ): Promise<RecurrentPaymentConsultResponseModel> {
+        const options = {
+            path: `/1/RecurrentPayment/${params.recurrentPaymentId}`,
+        };
 
-  public recurrent(params: ConsultTransactionRecurrentPaymentIdRequestModel): Promise<RecurrentPaymentConsultResponseModel> {
-      const options = {
-        path: `/1/RecurrentPayment/${params.recurrentPaymentId}`,
-      };
+        return this.util.get<RecurrentPaymentConsultResponseModel>(options);
+    }
 
-      return this.util.get<RecurrentPaymentConsultResponseModel>(options);
-  }
+    public bin(
+        params: ConsultBinRequestModel
+    ): Promise<ConsultBinResponseModel> {
+        const options = {
+            path: `/1/cardBin/${params.cardBin}`,
+        };
 
-  public bin(params: ConsultBinRequestModel): Promise<ConsultBinResponseModel> {
-      const options = {
-        path: `/1/cardBin/${params.cardBin}`,
-      };
+        return this.util.get<ConsultBinResponseModel>(options);
+    }
 
-      return this.util.get<ConsultBinResponseModel>(options);
-  }
+    public cardtoken(
+        params: ConsultTokenRequestModel
+    ): Promise<ConsultTokenResponseModel> {
+        const options = {
+            path: `/1/card/${params.cardToken}`,
+        };
 
-  public cardtoken(params: ConsultTokenRequestModel): Promise<ConsultTokenResponseModel> {
-      const options = {
-        path: `/1/card/${params.cardToken}`,
-      };
-
-      return this.util.get<ConsultTokenResponseModel>(options);
-  }
-  
+        return this.util.get<ConsultTokenResponseModel>(options);
+    }
 }

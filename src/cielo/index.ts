@@ -1,5 +1,4 @@
 export * from './cielo';
-export * from './class/utils';
 
 // MODELS
 export * from './models';

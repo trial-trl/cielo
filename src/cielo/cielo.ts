@@ -3,7 +3,7 @@ import { BankSlip } from './class/bank-slip';
 import { Recurrent } from './class/recurrent';
 import { Consult } from './class/consult';
 import { Card } from './class/cards';
-import { CieloTransactionInterface } from './interface/cielo-transaction.interface';
+import { TransactionInterface } from './interface/transaction.interface';
 import { CreditCard } from './class/creditcard';
 import { DebitCard } from './class/debit-card';
 
@@ -38,7 +38,7 @@ export class Cielo {
     this.requestId = constructor.requestId || undefined;
 
     const [hostnameTransaction, hostnameQuery] = this.getHostnames(this.sandbox);
-    const cieloTransactionInterface: CieloTransactionInterface = {
+    const cieloTransactionInterface: TransactionInterface = {
       hostnameTransaction,
       hostnameQuery,
       merchantId: this.merchantId,

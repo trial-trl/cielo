@@ -59,8 +59,9 @@
     "typescript": "^3.9.10"
   },
   "dependencies": {
-    "camelcase-keys": "^6.2.2",
     "@types/node": "^12.12.14",
+    "axios": "^1.6.8",
+    "camelcase-keys": "^6.2.2",
     "typed-rest-client": "^1.8.9"
   },
   "config": {

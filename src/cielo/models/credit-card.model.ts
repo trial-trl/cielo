@@ -7,10 +7,6 @@ export interface CreditCardModel {
    */
   cardNumber?: string;
   /**
-   * Token de identificação do Cartão.  
-   */
-  cardToken?: string;
-  /**
    * Nome do Comprador impresso no cartão.
    */
   holder?: string;

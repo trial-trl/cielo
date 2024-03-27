@@ -1,5 +1,5 @@
 import { AirlineDataModel } from './airline-data.model';
-import { CreditCardModel, TokenizedCreditCardModel } from './credit-card.model';
+import { CreditCardModel } from './credit-card.model';
 import { EnumPaymentInterest, EnumCardType } from "../enums";
 import { RecurrentPaymentModel } from './recurrent-payment';
 import { FraudAnalysisModel } from './fraud-analysis/fraud-analysis.model';

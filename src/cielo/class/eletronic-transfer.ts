@@ -1,17 +1,23 @@
-import { Utils, IHttpRequestOptions, HttpRequestMethodEnum } from './utils';
-import { CieloTransactionInterface } from '../interface/cielo-transaction.interface';
-import { EletronicTransferCreateResponseModel, EletronicTransferCreateRequestModel } from '../../models/eletronic-transfer';
+import { TransactionInterface } from '../interface/transaction.interface';
+import {
+    EletronicTransferCreateResponseModel,
+    EletronicTransferCreateRequestModel,
+} from '../models/eletronic-transfer';
+import { Utils } from './utils';
 
 export class EletronicTransfer {
-  private cieloTransactionParams: CieloTransactionInterface;
-  private util: Utils;
+    private util: Utils;
 
-  constructor(transaction: CieloTransactionInterface) {
-    this.cieloTransactionParams = transaction;
-    this.util = new Utils(this.cieloTransactionParams)
-  }
+    constructor(transactionParams: TransactionInterface) {
+        this.util = new Utils(transactionParams);
+    }
 
-  public create(request: EletronicTransferCreateRequestModel): Promise<EletronicTransferCreateResponseModel> {
-      return this.util.postToSales<EletronicTransferCreateResponseModel, EletronicTransferCreateRequestModel>(request);
-  }
+    public create(
+        request: EletronicTransferCreateRequestModel
+    ): Promise<EletronicTransferCreateResponseModel> {
+        return this.util.postToSales<
+            EletronicTransferCreateResponseModel,
+            EletronicTransferCreateRequestModel
+        >(request);
+    }
 }

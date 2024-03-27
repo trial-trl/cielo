@@ -1,18 +1,21 @@
 import { TokenizeResponseModel } from '../models/card/tokenize.response.model';
 import { TokenizeRequestModel } from '../models/card/tokenize.request.model';
-import { HttpRequestMethodEnum, IHttpRequestOptions, Utils } from './utils';
-import { CieloTransactionInterface } from '../interface/cielo-transaction.interface';
+import { TransactionInterface } from '../interface/transaction.interface';
+import { Utils } from './utils';
 
 export class Card {
-  private cieloTransactionParams: CieloTransactionInterface;
-  private util: Utils;
+    private util: Utils;
 
-  constructor(transaction: CieloTransactionInterface) {
-    this.cieloTransactionParams = transaction;
-    this.util = new Utils(this.cieloTransactionParams);
-  }
+    constructor(transactionParams: TransactionInterface) {
+        this.util = new Utils(transactionParams);
+    }
 
-  public createTokenizedCard(request: TokenizeRequestModel): Promise<TokenizeResponseModel> {
-      return this.util.post<TokenizeResponseModel, TokenizeRequestModel>({ path: '/1/card' }, request);
-  }
+    public createTokenizedCard(
+        request: TokenizeRequestModel
+    ): Promise<TokenizeResponseModel> {
+        return this.util.post<TokenizeResponseModel, TokenizeRequestModel>(
+            { path: '/1/card' },
+            request
+        );
+    }
 }

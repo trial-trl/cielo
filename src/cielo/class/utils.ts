@@ -1,152 +1,182 @@
-import { IncomingMessage } from 'http';
-import { request, RequestOptions } from 'https';
-import { CieloTransactionInterface } from '../interface/cielo-transaction.interface';
+import { IncomingMessage, request, RequestOptions } from 'http';
+import { TransactionInterface } from '../interface/transaction.interface';
 import camelcaseKeys from 'camelcase-keys';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 export class Utils {
-  private cieloConstructor: CieloTransactionInterface;
+    constructor(private transactionParams: TransactionInterface) {}
 
-  constructor(params: CieloTransactionInterface) {
-    this.cieloConstructor = params;
-  }
+    public get<T>(params: { path: string }): Promise<T> {
+        const hostname = this.transactionParams.hostnameQuery;
+        const { path } = params;
+        const method = HttpRequestMethodEnum.GET;
 
-  public get<T>(params: { path: string }): Promise<T> {
-    const hostname = this.cieloConstructor.hostnameQuery;
-    const { path } = params;
-    const method = HttpRequestMethodEnum.GET;
-
-    const options: IHttpRequestOptions = this.getHttpRequestOptions({
-      path,
-      hostname,
-      method,
-    });
-    return this.request<T>(options, {});
-  }
-
-  public postToSales<T, U>(data: U): Promise<T> {
-    return this.post<T, U>({ path: '/1/sales/' }, data);
-  }
-
-  /**
-   * Realiza um post na API da Cielo 
-   * @param params path do post
-   * @param data payload de envio
-   */
-  public post<T, U>(params: { path: string }, data: U):Promise<T> {
-    const { path } = params;
-    const options: IHttpRequestOptions = this.getHttpRequestOptions({
-      method: HttpRequestMethodEnum.POST,
-      path,
-      hostname: this.cieloConstructor.hostnameTransaction,
-    });
-    return this.request<T>(options, data);
-  }
-
-  public getHttpRequestOptions(params: { hostname: string, path: string, method: HttpRequestMethodEnum }): IHttpRequestOptions {
-    return {
-      method: params.method,
-      path: params.path,
-      hostname: params.hostname,
-      port: 443,
-      encoding: "utf-8",
-      headers: {
-        MerchantId: this.cieloConstructor.merchantId,
-        MerchantKey: this.cieloConstructor.merchantKey,
-        RequestId: this.cieloConstructor.requestId || "",
-        "Content-Type": "application/json",
-      },
-    } as IHttpRequestOptions;
-  }
-
-  private parseHttpRequestError(options: IHttpRequestOptions, data: string, responseHttp: any, responseCielo: any ): IHttpRequestReject {
-    responseHttp.Code = (Array.isArray(responseCielo) && responseCielo[0] && responseCielo[0].Code) || '';
-    responseHttp.Message = (Array.isArray(responseCielo) && responseCielo[0] && responseCielo[0].Message) || '';
-    return {
-      statusCode: responseHttp.statusCode || '',
-      request: JSON.stringify(data).toString(),      
-      response: responseHttp
-    } as IHttpRequestReject;
-  }
-
-  private parseHttpPutResponse(response: IncomingMessage): IHttpResponse {
-    return {
-      statusCode: response.statusCode || 0,
-      statusMessage: response.statusMessage || '',
-    }
-  }
-
-  public httpRequest(options: IHttpRequestOptions, data: any): Promise<IHttpResponse> {
-    const dataPost = JSON.stringify(data).normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-
-    return new Promise<IHttpResponse>((resolve, reject) => {
-      if (options && options.headers)
-        options.headers['Content-Length'] = Buffer.byteLength(dataPost)
-      const req = request(options, (res: IncomingMessage) => {
-        var chunks: string = '';
-        res.on('data', (chunk: any) => chunks += chunk);
-    
-        res.on('end', () => {
-          const response = (chunks.length > 0 && this.validateJSON(chunks)) ? JSON.parse(chunks) : '';
-          if (res.statusCode && [200, 201].indexOf(res.statusCode) === -1) return reject(this.parseHttpRequestError(options, data, res, response));
-          if (options.method === 'PUT' && chunks.length === 0) return resolve(this.parseHttpPutResponse(res));
-          return resolve({
-            ...this.parseHttpPutResponse(res),
-            data: camelcaseKeys(response, { deep: true })
-          })
+        const options: IHttpRequestOptions = this.getHttpRequestOptions({
+            path,
+            hostname,
+            method,
         });
-      });
+        return this.request<T>(options, {});
+    }
 
-      req.write(dataPost)
-      req.on('error', (err) => reject(err))
-      req.end()
-    });
-  }
+    public postToSales<T, U>(data: U): Promise<T> {
+        return this.post<T, U>({ path: '/1/sales/' }, data);
+    }
 
-  public request<T>(options: IHttpRequestOptions, data: any): Promise<T> {
-    return  new Promise((resolve, reject) => {
-      this.httpRequest(options, data)
-        .then((response) => {
-          const data = response.data ? response.data : {};
-          resolve(data as T)
-        })
-        .catch(reject);
-    })
-  }
-  
-  public validateJSON(text: string): boolean {
-    return !(/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/.test(
-      text.replace(/"(\\.|[^"\\])*"/g, ''))) &&
-      eval('(' + text + ')');	
-  }
+    public post<T, U>(params: { path: string }, data?: U): Promise<T> {
+        const { path } = params;
+        const options: IHttpRequestOptions = this.getHttpRequestOptions({
+            method: HttpRequestMethodEnum.POST,
+            path,
+            hostname: this.transactionParams.hostnameTransaction,
+        });
+        return this.request<T, U>(options, data);
+    }
+
+    public put<T, U = any>(params: { path: string }, data?: U): Promise<T> {
+        const { path } = params;
+        const options: IHttpRequestOptions = this.getHttpRequestOptions({
+            method: HttpRequestMethodEnum.PUT,
+            path,
+            hostname: this.transactionParams.hostnameTransaction,
+        });
+        return this.request<T, U>(options, data);
+    }
+
+    public getHttpRequestOptions(params: {
+        hostname: string;
+        path: string;
+        method: HttpRequestMethodEnum;
+    }): IHttpRequestOptions {
+        return {
+            method: params.method,
+            path: params.path,
+            hostname: params.hostname,
+            port: 443,
+            encoding: 'utf-8',
+            headers: {
+                MerchantId: this.transactionParams.merchantId,
+                MerchantKey: this.transactionParams.merchantKey,
+                RequestId: this.transactionParams.requestId || '',
+                'Content-Type': 'application/json',
+            },
+        } as IHttpRequestOptions;
+    }
+
+    private parseHttpRequestError(
+        data: any,
+        responseHttp: IHttpResponse,
+        responseCielo: any
+    ): IHttpRequestReject {
+        responseHttp.Code =
+            (Array.isArray(responseCielo) &&
+                responseCielo[0] &&
+                responseCielo[0].Code) ||
+            '';
+        responseHttp.Message =
+            (Array.isArray(responseCielo) &&
+                responseCielo[0] &&
+                responseCielo[0].Message) ||
+            '';
+        return {
+            statusCode: responseHttp.statusCode || '',
+            request: JSON.stringify(data).toString(),
+            response: responseHttp,
+        } as IHttpRequestReject;
+    }
+
+    public httpRequest<T>(
+        options: IHttpRequestOptions,
+        data: any
+    ): Promise<IHttpResponse> {
+        const dataPost = JSON.stringify(data)
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+
+        const axiosOptions: AxiosRequestConfig = {
+            method: options.method,
+            url: `https://${options.hostname}:${options.port}${options.path}`,
+            headers: options.headers,
+            data: dataPost,
+        };
+
+        return new Promise<IHttpResponse>((resolve, reject) => {
+            axios
+                .request<T>(axiosOptions)
+                .then((response: AxiosResponse) => {
+                    const responseData = response.data;
+                    const camelcasedData = camelcaseKeys(responseData, {
+                        deep: true,
+                    });
+                    const httpResponse: IHttpResponse = {
+                        statusCode: response.status || 0,
+                        statusMessage: response.statusText || '',
+                        data: camelcasedData,
+                    };
+                    resolve(httpResponse);
+                })
+                .catch((error: AxiosError<any>) => {
+                    if (error.response) {
+                        const response = error.response.data;
+                        const httpResponse: IHttpResponse = {
+                            statusCode: error.response.status || 0,
+                            statusMessage: error.response.statusText || '',
+                            data: camelcaseKeys(response, { deep: true }),
+                        };
+                        reject(
+                            this.parseHttpRequestError(
+                                data,
+                                httpResponse,
+                                response
+                            )
+                        );
+                    } else if (error.request) {
+                        reject(error.request);
+                    } else {
+                        reject(error.message);
+                    }
+                });
+        });
+    }
+
+    public request<T, U = any>(options: IHttpRequestOptions, data?: U): Promise<T> {
+        return new Promise((resolve, reject) => {
+            this.httpRequest<T>(options, data)
+                .then((response) => {
+                    const data = response.data ? response.data : {};
+                    resolve(data as T);
+                })
+                .catch(reject);
+        });
+    }
 }
 
-
 export enum HttpRequestMethodEnum {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT'
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
 }
 
 export interface IHttpRequestOptions extends RequestOptions {
-  method: HttpRequestMethodEnum;
-  path: string;
-  hostname: string;
-  headers: any;
-  encoding: string;
-  port: number;
+    method: HttpRequestMethodEnum;
+    path: string;
+    hostname: string;
+    headers: any;
+    encoding: string;
+    port: number;
 }
 
 export interface IHttpRequestReject {
-  statusCode: string;
-  request: string;
-  response: IncomingMessage;
+    statusCode: string;
+    request: string;
+    response: IncomingMessage;
 }
 
 /**
  * Interface com dados que serão retornados em todas as requisições
  */
 export interface IHttpResponse {
-  statusCode: number;
-  statusMessage: string;
-  data?: any;
+    statusCode: number;
+    statusMessage: string;
+    data?: any;
 }

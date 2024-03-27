@@ -1,4 +1,4 @@
-export interface CieloTransactionInterface {
+export interface TransactionInterface {
   hostnameTransaction: string;
   hostnameQuery: string;
   merchantId: string;
